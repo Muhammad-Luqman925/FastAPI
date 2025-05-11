@@ -1,10 +1,18 @@
 from fastapi import FastAPI
 from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware 
 import pickle
 import pandas as pd
 
 app = FastAPI(title="Customer Clustering API")
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost"],  # Mengizinkan semua asal. Ganti dengan ["http://localhost"] untuk lebih spesifik
+    allow_credentials=True,
+    allow_methods=["*"],  # Mengizinkan semua metode HTTP (GET, POST, dll)
+    allow_headers=["*"],
+)
 # Load hanya model
 with open("kmeans_model.pkl", "rb") as f:
     kmeans_model = pickle.load(f)
