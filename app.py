@@ -6,11 +6,15 @@ import pandas as pd
 
 app = FastAPI(title="Customer Clustering API")
 
+origins = [
+    "http://perpus-digital.xyz",  # <- ganti ini
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://perpus-digital.xyz/"],  # Mengizinkan semua asal. Ganti dengan ["http://localhost"] untuk lebih spesifik
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],  # Mengizinkan semua metode HTTP (GET, POST, dll)
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 # Load hanya model
