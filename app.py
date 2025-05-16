@@ -8,7 +8,7 @@ app = FastAPI(title="Customer Clustering API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost"],  # Mengizinkan semua asal. Ganti dengan ["http://localhost"] untuk lebih spesifik
+    allow_origins=["https://perpus-digital.xyz/"],  # Mengizinkan semua asal. Ganti dengan ["http://localhost"] untuk lebih spesifik
     allow_credentials=True,
     allow_methods=["*"],  # Mengizinkan semua metode HTTP (GET, POST, dll)
     allow_headers=["*"],
