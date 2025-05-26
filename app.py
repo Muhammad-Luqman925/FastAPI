@@ -24,9 +24,9 @@ with open("scaler_rfm.pkl", "rb") as f:
 
 # Schema input user
 class CustomerInput(BaseModel):
-    Recency: float = Field(..., alias="Recency")
-    Frequency: float = Field(..., alias="Frequency")
-    Monetary: float = Field(..., alias="Monetary")
+    Recency: int = Field(..., alias="Recency")
+    Frequency: int = Field(..., alias="Frequency")
+    Monetary: int = Field(..., alias="Monetary")
 
     class Config:
         validate_by_name = True
