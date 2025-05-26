@@ -6,10 +6,10 @@ import pandas as pd
 
 app = FastAPI(title="Customer Clustering API")
 
-# Izinkan akses dari browser
+# Izinkan akses dari browser (JavaScript fetch)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Ganti sesuai kebutuhan
+    allow_origins=["*"],  # Bisa diganti dengan ['http://localhost:3000'] jika dibatasi
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -24,9 +24,9 @@ with open("scaler_rfm.pkl", "rb") as f:
 
 # Schema input user
 class CustomerInput(BaseModel):
-    Recency: int = Field(..., alias="Recency")
-    Frequency: int = Field(..., alias="Frequency")
-    Monetary: int = Field(..., alias="Monetary")
+    Recency: float = Field(..., alias="Recency")
+    Frequency: float = Field(..., alias="Frequency")
+    Monetary: float = Field(..., alias="Monetary")
 
     class Config:
         validate_by_name = True
@@ -38,23 +38,8 @@ def root():
 @app.post("/predict")
 def predict(data: CustomerInput):
     df = pd.DataFrame([data.dict(by_alias=True)])
-
-    # Validasi: semua nilai 0
-    if (df == 0).all(axis=1).iloc[0]:
-        return {
-            "error": "❌ Data input tidak valid: semua nilai RFM adalah 0. Clustering tidak dapat dilakukan."
-        }
-
-    # Validasi: ada nilai negatif
-    if (df < 0).any(axis=1).iloc[0]:
-        return {
-            "error": "❌ Data input tidak valid: tidak boleh ada nilai negatif dalam Recency, Frequency, atau Monetary."
-        }
-
-    # Lanjutkan jika data valid
     scaled_data = scaler_rfm.transform(df)
     cluster = kmeans_model.predict(scaled_data)[0]
-
     return {
         "predicted_cluster": int(cluster)
     }
